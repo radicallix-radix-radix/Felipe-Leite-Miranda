@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>The Forgotten Kingdom</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=IM+Fell+English:ital@0;1&display=swap');
+
+        :root {
+            --gold: #b49a65;
+            --gold-light: #d0bd8d;
+            --dark: #15130f;
+            --panel: rgba(25, 23, 18, 0.90);
+            --text: #c9bea5;
+        }
+
+        /* CONFIGURACIÓN GENERAL */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #100f0d;
+            color: var(--text);
+            font-family: 'IM Fell English', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            isolation: isolate;
+        }
+
+        /* FONDO PERSONALIZABLE */
+
+        .background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+
+            background-image:
+                linear-gradient(rgba(12, 11, 9, 0.55),
+                    rgba(12, 11, 9, 0.80)),
+                url("images/fondo1.jpg");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* GRANULADO DE PELÍCULA ANTIGUA */
+
+        .grain {
+            position: fixed;
+            inset: -50%;
+            width: 200%;
+            height: 200%;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0.15;
+
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+
+            animation: grain 4.0s steps(1) infinite;
+        }
+
+        @keyframes grain {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            25% {
+                transform: translate(2%, -1%);
+            }
+
+            50% {
+                transform: translate(-1%, 2%);
+            }
+
+            75% {
+                transform: translate(1%, 1%);
+            }
+
+            100% {
+                transform: translate(-2%, -1%);
+            }
+        }
+
+        /* ENCABEZADO */
+
+        header {
+            text-align: center;
+            padding: 65px 20px 30px;
+        }
+
+        header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 500;
+            letter-spacing: 6px;
+            color: var(--gold-light);
+
+            text-shadow:
+                2px 3px 4px #000,
+                0 0 20px rgba(180, 154, 101, 0.2);
+        }
+
+        header p {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: #8e8166;
+        }
+
+        /* NAVEGACIÓN */
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px auto 35px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--gold-light);
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+
+            padding: 10px 19px;
+            border: 1px solid #75623d;
+            background: rgba(18, 16, 12, 0.85);
+
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            background: #6d5733;
+            color: #fff0cb;
+            box-shadow: 0 0 15px rgba(180, 154, 101, 0.2);
+        }
+
+        /* CONTENEDOR */
+
+        .container {
+            width: min(850px, 91%);
+            margin: auto;
+        }
+
+        /* CUADROS */
+
+        .panel {
+            position: relative;
+            background: var(--panel);
+            border: 1px solid #796747;
+
+            padding: 30px;
+            margin-bottom: 24px;
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.65),
+                inset 0 0 25px rgba(165, 130, 70, 0.06);
+        }
+
+        /* BORDE INTERIOR */
+
+        .panel::before {
+            content: "";
+            position: absolute;
+            inset: 5px;
+            border: 1px solid rgba(180, 154, 101, 0.2);
+            pointer-events: none;
+        }
+
+        /* PERFIL */
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            min-height: 235px;
+        }
+
+        .photo-area {
+            width: 180px;
+            min-width: 180px;
+            height: 180px;
+
+            border: 2px solid var(--gold);
+            padding: 5px;
+
+            background: #17140e;
+            box-shadow: 0 0 18px rgba(0, 0, 0, 0.8);
+        }
+
+        .photo-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: sepia(0.2) brightness(0.85);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info .small {
+            font-family: 'Cinzel', serif;
+            color: #97835c;
+            letter-spacing: 3px;
+            font-size: 0.7rem;
+        }
+
+        .profile-info h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--gold-light);
+            margin: 8px 0 13px;
+        }
+
+        .profile-info p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #c9bea5;
+        }
+
+        /* TÍTULOS */
+
+        .panel h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--gold-light);
+            letter-spacing: 2px;
+            margin-bottom: 17px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #635235;
+        }
+
+        /* DESCRIPCIÓN */
+
+        .description {
+            background:
+                linear-gradient(rgba(48, 25, 1, 0.88),
+                    rgba(85, 65, 45, 0.94)),
+                url("./images/fundodesc.jpg");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            border: px solid #796747;
+        }
+
+        /* DOS CUADROS INFERIORES */
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .bottom-grid .panel {
+            margin-bottom: 24px;
+        }
+
+        /* ENLACES Y CONTACTOS */
+
+        .item {
+            display: block;
+            color: #c4ad7e;
+            text-decoration: none;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(180, 154, 101, 0.15);
+            transition: 0.3s;
+        }
+
+        .item:hover {
+            color: #fff0c5;
+            padding-left: 7px;
+        }
+
+        /* PIE */
+
+        footer {
+            text-align: center;
+            padding: 35px 15px;
+            font-family: 'Cinzel', serif;
+            color: #756749;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+        }
+
+        /* SELECTORES DE IMAGEN */
+
+        .file-label {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 9px 13px;
+
+            background: #302719;
+            border: 1px solid #8b7548;
+            color: #d4c29b;
+
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .file-label:hover {
+            background: #59462b;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .background-control {
+
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            z-index: 20;
+
+            background: rgba(20, 18, 14, 0.95);
+            border: 1px solid #88734c;
+            padding: 10px 14px;
+
+            color: var(--gold-light);
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            cursor: pointer;
+        }
+
+        /* MÓVILES */
+
+        .friend-image {
+
+            width: fit-content;
+            margin: 20px auto 0;
+            padding: 6px;
+            border: 1px solid #796747;
+            background: #17140e;
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.6),
+                inset 0 0 12px rgba(180, 154, 101, 0.1);
+        }
+
+        .friend-image img {
+            display: block;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            filter: sepia(0.2) brightness(0.85);
+        }
+
+        /* ALINEACIÓN DE IMÁGENES */
+
+        .bottom-grid .panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bottom-grid .fixed-image,
+        .bottom-grid .friend-image {
+            margin-top: auto;
+        }
+
+        .fixed-image {
+            width: fit-content;
+            margin: 20px auto 0;
+            padding: 6px;
+            border: 1px solid #796747;
+            background: #17140e;
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.6),
+                inset 0 0 12px rgba(180, 154, 101, 0.1);
+        }
+
+        .fixed-image img {
+            display: block;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            filter: sepia(0.2) brightness(0.85);
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+                padding-top: 45px;
+            }
+
+            header h1 {
+                letter-spacing: 3px;
+            }
+
+            .profile {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-info h2 {
+                font-size: 1.7rem;
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .panel {
+                padding: 24px;
+            }
+
+            nav {
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- FONDO -->
+
+    <div class="background" id="background"></div>
+    <div class="grain"></div>
+
+    <!-- ENCABEZADO -->
+
+    <header>
+        <h1> Mi Página Web </h1>
+        <p>✦ Saludos Caballero, esto es un proyecto ✦</p>
+    </header>
+
+    <!-- MENÚ -->
+
+    <nav>
+        <a href="#profile">Perfil</a>
+        <a href="#description">Sobre Mí</a>
+        <a href="#links">Enlaces</a>
+        <a href="#contact">Amiguis</a>
+    </nav>
+
+    <main class="container">
+
+        <!-- CUADRO DE PERFIL -->
+
+        <section class="panel profile" id="profile">
+
+            <div class="photo-area">
+                <img src="./images/perfil.jpg" alt="Mi fotografía">
+            </div>
+            <div class="profile-info">
+
+                <span class="small">
+                    ✦ THE REPROBADO ✦
+                </span>
+
+                <h2>Felipe Leite Miranda</h2>
+
+                <p>
+                    Bienvenido a mi sitio web que lo tuve que hacer otra vez
+                    devido que reprobé, así que nada de nuevo, solo un
+                    cambio de estilo.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- CUADRO DE DESCRIPCIÓN -->
+
+        <section class="panel description" id="description">
+
+            <h3>✦ Sobre mí ✦</h3>
+
+            <p>
+                Soy Felipe Leite Miranda, estudiante de la Univesidad Católica San Pablo, en la carrera de computación,
+                soy brasileño y busco regresar a mi pais.
+                Tengo habilidades en arte digital y dibujo manual, además uso blender para modelar casas y personajes,
+                hablo español, portugués y inglés fluidos y aún busco
+                aprender francés. Tengo 22 años y me encanta entender mejor todo lo que sean cursos o lo que sea lógico,
+                como medicina, arquitectura y matemáticas. Estudio Programación
+                constante. No soy muy bueno en humanidades ya que no es mi estilo. Juego videojuegos y me gusta una vida
+                tranquila, me encantaria un departamento en el alto del triangulo histórico
+                de São Paulo o una casa en los campos donde vivia en Brasilia. Soy demasiado calmo y me gusta todo tipo
+                de música o información, superé el vício en fumo y me dedico a estudiar lo que sea de
+                matemática y física, busco estar perfectamente bien para desenvolver algun juego.
+            </p>
+
+            <div class="about-image">
+                <img src="./images/sobremi.jpg" alt="Imagen de Sobre mí">
+            </div>
+
+        </section>
+
+        <!-- CUADROS INFERIORES -->
+
+        <div class="bottom-grid">
+
+            <!-- ENLACES -->
+
+            <section class="panel" id="links">
+
+                <h3>✦ EXTERNAL LINKS ✦</h3>
+
+                <a class="item" href="https://www.linkedin.com/in/felipe-miranda-45a7ab2a7/" target="_blank">
+                    ⚔ Mi LinkedIn
+                </a>
+
+                <a class="item" href="https://github.com/radicallix-radix-radix" target="_blank">
+                    ⚔ Github
+                </a>
+
+                <div class="fixed-image">
+                    <img src="./images/adiciones.jpg" alt="Imagen decorativa">
+                </div>
+
+            </section>
+
+            <!-- CONTACTOS -->
+
+            <section class="panel" id="contact">
+
+                <h3>✦ Amigos ✦</h3>
+
+                <a class="item" href="https://smhir.github.io/Rodrigo-Samhir-Mario-Cueva-Zenteno/">
+                    ✉ Samhir Cueva
+                </a>
+                <div class="friend-image">
+                    <img src="./images/fondo3.jpg" alt="Samhir">
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <footer>
+        Que todo valga la pena
+        <br><br>
+        © 2026 — UCSP - Ciencia de la Computación
+    </footer>
+
+</body>
+
+</html>
